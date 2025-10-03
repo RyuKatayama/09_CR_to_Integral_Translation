@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>批判的実在論 → インテグラル理論への圏論的翻訳</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #8e44ad 50%, #3498db 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            width: 1400px;
+            height: 788px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            padding: 50px 60px;
+            display: none;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #8e44ad;
+            padding-bottom: 15px;
+        }
+
+        .slide-header h1 {
+            font-size: 2em;
+            color: #1a202c;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #e74c3c, #8e44ad, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-header .subtitle {
+            font-size: 1.2em;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .content-section {
+            margin: 25px 0;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #8e44ad;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 5px solid #8e44ad;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.75em;
+        }
+
+        th {
+            background: linear-gradient(135deg, #e74c3c, #8e44ad);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            background: #f7fafc;
+        }
+
+        tr:nth-child(even) td {
+            background: #edf2f7;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .process-box {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border: 3px solid #8e44ad;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .process-box .title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .process-box .desc {
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #8e44ad;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border-left: 6px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .key-concept-box {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border: 3px solid #8e44ad;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .preservation-box {
+            background: linear-gradient(135deg, #d4edda 0%, #a3d9a5 100%);
+            border: 3px solid #28a745;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .transformation-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 3px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .cr-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 3px solid #e53935;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .integral-box {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border: 3px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .quadrant-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+            height: 280px;
+        }
+
+        .quadrant {
+            padding: 12px;
+            border-radius: 10px;
+            border: 3px solid;
+            font-size: 0.8em;
+        }
+
+        .quadrant-i {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdeaa8 100%);
+            border-color: #f39c12;
+        }
+
+        .quadrant-it {
+            background: linear-gradient(135deg, #e8f4f8 0%, #b8e6f5 100%);
+            border-color: #3498db;
+        }
+
+        .quadrant-we {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            border-color: #e91e63;
+        }
+
+        .quadrant-its {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-color: #e53935;
+        }
+
+        .quadrant-title {
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .quadrant-content {
+            line-height: 1.3;
+        }
+
+        .levels-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 3px solid #ff9800;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.85em;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #7d3c98;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #a0aec0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        ul li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #8e44ad;
+            font-size: 0.8em;
+        }
+
+        strong {
+            color: #2d3748;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #f8f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px solid #8e44ad;
+        }
+
+        .testimonial {
+            background: #fafafa;
+            border-left: 4px solid #8e44ad;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-style: italic;
+        }
+
+        .dimension-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: タイトル -->
+        <div class="slide active">
+            <div class="slide-header">
+                <h1>批判的実在論 → インテグラル理論</h1>
+                <div class="subtitle">圏論的翻訳メカニズムの実例</div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #6b21a8; margin-bottom: 15px; font-size: 1.3em;">翻訳の全体像</h3>
+                <div class="formula">
+                    翻訳 = π_Integral ∘ 変換_{(We∪Its)→全象限} ∘ embed_CR
+                </div>
+                <p style="margin-top: 15px; font-size: 1.1em; color: #2d3748; line-height: 1.8;">
+                    社会変革の批判理論を、<br>
+                    包括的な統合理論へと<br>
+                    <strong style="color: #8b5cf6;">次元拡張しながら変換</strong>する
+                </p>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-box" style="background: linear-gradient(135deg, #ffebee, #ffcdd2); border-color: #e53935;">
+                    <div class="title" style="color: #c62828;">ステップ1</div>
+                    <div class="desc">埋め込み<br>Embedding</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7); border-color: #8e44ad;">
+                    <div class="title" style="color: #6a1b9a;">ステップ2</div>
+                    <div class="desc">象限変換<br>Transformation</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border-color: #8b5cf6;">
+                    <div class="title" style="color: #7c3aed;">ステップ3</div>
+                    <div class="desc">射影<br>Projection</div>
+                </div>
+            </div>
+
+            <div class="cr-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">批判的実在論の視点</h3>
+                <p style="line-height: 1.7;">
+                    <strong>焦点:</strong> (We∪Its)象限—社会構造と集合的変革<br>
+                    「原発の構造的差別」「エネルギー貧困」は客観的に実在する権力構造
+                </p>
+            </div>
+
+            <div class="integral-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">インテグラル理論の視点</h3>
+                <p style="line-height: 1.7;">
+                    <strong>焦点:</strong> 全象限(I∪It∪We∪Its)—統合的理解<br>
+                    批判的実在論の構造分析を<strong>「含んで超える」</strong>：Itsの権力構造分析に加えて、I/It/We象限も統合
+                </p>
+            </div>
+
+            <div class="dimension-box">
+                <h3 style="color: #d97706; margin-bottom: 10px; font-size: 1.2em;">次元拡張: (We∪Its) → 30次元</h3>
+                <div class="formula" style="background: white; border-color: #d97706;">
+                    4象限 × (発達段階 + ライン + 状態 + 類型) = 30次元統合空間
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong style="font-size: 1.2em;">本スライドの構成：</strong><br>
+                スライド2: ステップ1 - 批判的実在論のM⁶⁵空間への埋め込み<br>
+                スライド3: ステップ2 - (We∪Its)象限から全象限への拡張<br>
+                スライド4: I象限とIt象限での統合的経験<br>
+                スライド5: We象限とIts象限での統合的経験<br>
+                スライド6: 発達段階（Levels）による統合的分析<br>
+                スライド7: 完全な翻訳例と「含んで超える」関係
+            </div>
+
+            <div class="slide-number">1/7</div>
+        </div>
+
+        <!-- Slide 2: ステップ1 埋め込み -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ1: 埋め込み (Embedding)</h1>
+                <div class="subtitle">embed_CR: 批判的実在論 → M⁶⁵|(We∪Its)象限</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">批判的実在論の3層ドメイン構造（簡約版）</div>
+                
+                <div class="cr-box">
+                    <h4 style="color: #c62828; margin-bottom: 8px;">Real Domain（実在的ドメイン）</h4>
+                    <p style="font-size: 0.85em; line-height: 1.5;">
+                        目に見えない深層構造:<br>
+                        ・エネルギー支配の権力構造（集中型発電による巨大資本支配）<br>
+                        ・環境負荷の外部化（CO2排出を将来世代・途上国に転嫁）<br>
+                        ・原子力の隠蔽構造（リスク社会化、立地地域への構造的差別）<br>
+                        ・再エネ移行抵抗（既存権力維持）<br>
+                        ・エネルギー貧困の構造的生産
+                    </p>
+                </div>
+
+                <div class="cr-box">
+                    <h4 style="color: #c62828; margin-bottom: 8px;">Actual Domain（実際的ドメイン）</h4>
+                    <p style="font-size: 0.85em; line-height: 1.5;">
+                        対抗的実践による社会変革:<br>
+                        ・地域エネルギー自治の実践<br>
+                        ・労働組合による公正な移行要求<br>
+                        ・環境正義運動<br>
+                        ・原子力脱神話化
+                    </p>
+                </div>
+
+                <div class="cr-box">
+                    <h4 style="color: #c62828; margin-bottom: 8px;">Empirical Domain（経験的ドメイン）</h4>
+                    <p style="font-size: 0.85em; line-height: 1.5;">
+                        抑圧の経験: 「原発誘致で村が分断」「電気代が払えず暖房を切った」<br>
+                        解放の経験: 「市民出資で太陽光発電所を作った」
+                    </p>
+                </div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">批判的実在論の焦点</h3>
+                <p style="line-height: 1.7;">
+                    批判的実在論は<strong>(We∪Its)象限</strong>—集合的文化と社会構造—に焦点を当てる。<br>
+                    個人の内面(I象限)や身体(It象限)への言及は限定的。<br>
+                    発達段階という視点も明示的にはない。
+                </p>
+            </div>
+
+            <div class="slide-number">2/7</div>
+        </div>
+
+        <!-- Slide 3: ステップ2 象限変換 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ2: 象限変換 (Transformation)</h1>
+                <div class="subtitle">変換: M⁶⁵|(We∪Its) → M⁶⁵|(I∪It∪We∪Its)</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">象限拡張の具体例</div>
+                <table style="font-size: 0.75em;">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">象限</th>
+                            <th style="width: 44%;">批判的実在論</th>
+                            <th style="width: 44%;">インテグラル理論での拡張</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>I<br>(個人内面)</strong></td>
+                            <td>（暗黙的）被抑圧者の経験</td>
+                            <td>原発立地住民の<strong>内的不安・恐怖・怒り</strong>、意識の<strong>発達段階</strong>（慣習的→後慣習的→統合的）、価値観の変容プロセス</td>
+                        </tr>
+                        <tr>
+                            <td><strong>It<br>(個人外面)</strong></td>
+                            <td>（ほぼ言及なし）</td>
+                            <td>原発周辺住民の<strong>健康データ</strong>（甲状腺異常率）、避難訓練の実施状況、ストレス性疾患の発症率、行動パターンの変化</td>
+                        </tr>
+                        <tr>
+                            <td><strong>We<br>(集合内面)</strong></td>
+                            <td>構造的差別という社会関係</td>
+                            <td>立地地域の<strong>分断された文化</strong>（賛成派/反対派）、「安全神話」という<strong>集合的信念</strong>、世代間の価値観対立、<strong>文化的発達段階</strong>の進化</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Its<br>(集合外面)</strong></td>
+                            <td><strong>権力構造・経済システム</strong><br>（批判的実在論の主焦点）</td>
+                            <td>原発交付金制度、電力会社の地域支配構造、立地自治体の財政依存度、避難計画の不備<br>（批判的実在論の分析を<strong>そのまま包含</strong>）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="transformation-box">
+                <h3 style="color: #1565c0; margin-bottom: 10px;">変換の性質</h3>
+                <ul style="font-size: 0.9em;">
+                    <li><strong>Observer:</strong> 社会変革のAgency → 統合的自己(Integral_Self)</li>
+                    <li><strong>Focus:</strong> 権力構造と社会的排除 → 統合的課題(Challenge)</li>
+                    <li><strong>Method:</strong> 批判的構造分析 → 統合的実践(Practice)</li>
+                    <li><strong>Construction:</strong> 対抗的社会実践 → 統合的理解(Understanding)</li>
+                    <li><strong>Target:</strong> 構造的解放 → 統合的意識(Consciousness)</li>
+                </ul>
+            </div>
+
+            <div class="slide-number">3/7</div>
+        </div>
+
+        <!-- Slide 4: I象限とIt象限 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>I象限とIt象限での統合的経験</h1>
+                <div class="subtitle">個人の内面と外面の明示化</div>
+            </div>
+
+            <div class="content-section">
+                <div class="quadrant-grid">
+                    <div class="quadrant quadrant-i">
+                        <div class="quadrant-title" style="color: #d68910;">I象限（個人内面）</div>
+                        <div class="quadrant-content">
+                            <strong>原発立地住民の内的変容:</strong><br>
+                            慣習的段階「権威を信頼」<br>
+                            ↓ 事故後<br>
+                            後慣習的段階「批判的思考」<br>
+                            ↓ 対話実践<br>
+                            統合的段階「システム思考と自己省察」<br><br>
+                            感情: 恐怖→怒り→無力感→エンパワーメント
+                        </div>
+                    </div>
+                    <div class="quadrant quadrant-it">
+                        <div class="quadrant-title" style="color: #2c5282;">It象限（個人外面）</div>
+                        <div class="quadrant-content">
+                            <strong>客観的健康・行動データ:</strong><br>
+                            ・甲状腺異常率の増加<br>
+                            ・ストレス性疾患（不眠症）<br>
+                            ・避難訓練の実施状況<br>
+                            ・太陽光発電導入後の行動変化<br>
+                            （天気予報チェック、電力消費意識、地域活動参加）
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    「私は原発建設時、『安全だ』を信じていた（慣習的段階）。事故後、批判的に考えるようになった（後慣習的段階）。そして今、『これはエネルギーシステム全体の問題であり、私も共犯者だ』という統合的認識に至った（統合的段階）。私は『被害者』でも『闘士』でもなく、『エネルギー転換を生きる統合的人間』だ。」<br>
+                    <strong>—原発立地住民の内的変容（I象限）</strong>
+                </div>
+
+                <div class="testimonial">
+                    「事故後、子供の甲状腺異常が増加した（It象限の客観データ）。私自身、不眠症になった。しかし今、ヨガと瞑想の実践により、身体は癒されつつある。」<br>
+                    <strong>—健康影響と回復（It象限）</strong>
+                </div>
+            </div>
+
+            <div class="integral-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">I-It統合の重要性</h3>
+                <p style="line-height: 1.7; font-size: 0.95em;">
+                    批判的実在論は社会構造(We∪Its)に焦点を当てるが、個人の内的変容(I)や身体的影響(It)は明示的に扱われない。インテグラル理論は、これらを明示化し、<strong>4象限の相互作用</strong>として理解する。
+                </p>
+            </div>
+
+            <div class="slide-number">4/7</div>
+        </div>
+
+        <!-- Slide 5: We象限とIts象限 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>We象限とIts象限での統合的経験</h1>
+                <div class="subtitle">集合の内面と外面—批判的実在論の包含</div>
+            </div>
+
+            <div class="content-section">
+                <div class="quadrant-grid">
+                    <div class="quadrant quadrant-we">
+                        <div class="quadrant-title" style="color: #c2185b;">We象限（集合内面）</div>
+                        <div class="quadrant-content">
+                            <strong>文化的分断と統合:</strong><br>
+                            ・原発誘致で村が賛成派/反対派に分断<br>
+                            ・それぞれの文化的発達段階での妥当性<br>
+                            ・事故後の統合プロセス<br>
+                            ・「安全神話」という集合的信念の解体と再構築<br>
+                            ・世代間文化の進化（無限使用→省エネ→持続可能性→気候正義）
+                        </div>
+                    </div>
+                    <div class="quadrant quadrant-its">
+                        <div class="quadrant-title" style="color: #c62828;">Its象限（集合外面）</div>
+                        <div class="quadrant-content">
+                            <strong>批判的実在論の構造分析を包含:</strong><br>
+                            ・原発交付金制度（財政依存構造）<br>
+                            ・電力会社の地域支配<br>
+                            ・避難計画の不備<br>
+                            ・送配電網の独占構造<br>
+                            ・エネルギー政策の中央集権性<br>
+                            <strong>→ Its象限の権力構造がI/It/We象限に因果的影響</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    「私たちの村は原発で分断された（We象限）。しかし事故後、『原発の是非』を超えて、『地域の未来をどう創るか』という新しい共有価値が生まれつつある。これは文化的発達段階の進化—二項対立から統合的対話へ。」<br>
+                    <strong>—文化的変容（We象限）</strong>
+                </div>
+
+                <div class="testimonial">
+                    「原発交付金制度（Its象限）が、立地自治体を財政依存させた。これにより、住民の選択の自由（I象限）が構造的に制約された。電力会社の支配（Its象限）が、地域文化（We象限）を『原発容認文化』へと形成した。<strong>Its象限の構造がI/It/We象限に因果的影響を与える</strong>—批判的実在論の洞察は正しい。」<br>
+                    <strong>—構造的因果関係（Its→I/It/We）</strong>
+                </div>
+            </div>
+
+            <div class="integral-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">批判的実在論の包含</h3>
+                <p style="line-height: 1.7; font-size: 0.95em;">
+                    批判的実在論の権力構造分析は、インテグラル理論の<strong>Its象限分析として包含される</strong>。<br>
+                    さらに、Itsの構造がI/It/We象限にどう影響するかという<strong>4象限の相互作用</strong>が明示化される。
+                </p>
+            </div>
+
+            <div class="slide-number">5/7</div>
+        </div>
+
+        <!-- Slide 6: 発達段階 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>発達段階（Levels）による統合的分析</h1>
+                <div class="subtitle">批判的実在論が見落としていた次元</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">エネルギー問題への発達段階的理解</div>
+                
+                <div class="levels-box">
+                    <h4 style="color: #ef6c00; margin-bottom: 6px;">前慣習的段階</h4>
+                    <strong>理解:</strong> 「電気は魔法のようにコンセントから出てくる」（因果理解なし）<br>
+                    <strong>該当:</strong> 幼児
+                </div>
+
+                <div class="levels-box">
+                    <h4 style="color: #ef6c00; margin-bottom: 6px;">慣習的段階</h4>
+                    <strong>理解:</strong> 「電力会社が言うことは正しい」「原発は国が認めているから安全」（権威依存）<br>
+                    <strong>該当:</strong> 多くの一般市民（前批判的）
+                </div>
+
+                <div class="levels-box">
+                    <h4 style="color: #ef6c00; margin-bottom: 6px;">後慣習的段階</h4>
+                    <strong>理解:</strong> 「原発には構造的問題がある」「批判的に情報を評価する」（原理原則）<br>
+                    <strong>該当:</strong> 環境活動家、批判的知識人<br>
+                    <strong style="color: #d32f2f;">→ 批判的実在論は主にこの段階から書かれている</strong>
+                </div>
+
+                <div class="levels-box">
+                    <h4 style="color: #ef6c00; margin-bottom: 6px;">統合的段階</h4>
+                    <strong>理解:</strong> 「エネルギー問題は4象限すべてにわたる統合的課題であり、すべての発達段階の人々を包含する解決策が必要」<br>
+                    <strong>該当:</strong> インテグラル実践者
+                </div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">重要な洞察</h3>
+                <p style="line-height: 1.6; font-size: 0.9em;">
+                    批判的実在論は主に<strong>後慣習的段階の視点</strong>から書かれている。「構造的問題を批判的に分析する」という方法論自体が、後慣習的意識を前提とする。<br><br>
+                    しかし、社会には<strong>すべての発達段階の人々</strong>がいる。統合的アプローチは：<br>
+                    ・慣習的段階の人々（「権威を信頼したい」）も<br>
+                    ・後慣習的段階の人々（「批判的に考えたい」）も<br>
+                    <strong>それぞれの発達段階で包含する</strong>解決策を目指す。
+                </p>
+            </div>
+
+            <div class="testimonial">
+                「私は環境活動家として、長年『なぜ人々は気候変動の深刻さを理解しないのか』と苛立っていた。インテグラル理論を学んで理解した—人々が異なる発達段階にいるからだ。慣習的段階の人々に、いきなり『資本主義の構造的問題』（後慣習的批判）を語っても届かない。しかし『家族の未来』『地域の安全』（慣習的価値）から語れば、対話が始まる。そして対話の中で、人々は自然に発達していく。」<br>
+                <strong>—発達段階を考慮した統合的アプローチ</strong>
+            </div>
+
+            <div class="slide-number">6/7</div>
+        </div>
+
+        <!-- Slide 7: 完全な翻訳例と検証 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>完全な翻訳例と「含んで超える」関係</h1>
+                <div class="subtitle">翻訳 = π_Integral ∘ 変換_{(We∪Its)→全象限} ∘ embed_CR</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">翻訳における本質的変化</div>
+                
+                <table style="font-size: 0.8em;">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">側面</th>
+                            <th style="width: 37.5%;">批判的実在論</th>
+                            <th style="width: 37.5%;">インテグラル理論</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>焦点象限</strong></td>
+                            <td>(We∪Its)—社会構造と集合的変革</td>
+                            <td>全象限(I∪It∪We∪Its)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>権力構造</strong></td>
+                            <td>客観的に実在する抑圧メカニズム</td>
+                            <td>Its象限の構造であり、I/It/We象限と相互作用</td>
+                        </tr>
+                        <tr>
+                            <td><strong>主体</strong></td>
+                            <td>社会変革のAgency</td>
+                            <td>統合的自己(全象限で発達)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>発達の視点</strong></td>
+                            <td>（明示的になし）</td>
+                            <td>発達段階・ライン・状態・類型</td>
+                        </tr>
+                        <tr>
+                            <td><strong>変革の方法</strong></td>
+                            <td>構造的対抗実践</td>
+                            <td>全象限での統合的実践</td>
+                        </tr>
+                        <tr>
+                            <td><strong>目標</strong></td>
+                            <td>構造的解放・社会的正義</td>
+                            <td>統合的意識の発達・全象限の調和</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div class="preservation-box">
+                    <h3 style="color: #2e7d32; margin-bottom: 10px;">包含された構造</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>6要素プロセスの循環構造</li>
+                        <li>批判的実在論の権力構造分析はIts象限として包含</li>
+                        <li>対抗実践は統合的実践の一部として包含</li>
+                    </ul>
+                </div>
+
+                <div class="transformation-box">
+                    <h3 style="color: #1565c0; margin-bottom: 10px;">拡張された要素</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>象限: (We∪Its) → (I∪It∪We∪Its)</li>
+                        <li>次元: 2象限 → 30次元</li>
+                        <li>発達段階・ライン・状態・類型の追加</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-concept-box" style="margin-top: 15px;">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">「含んで超える」関係</h3>
+                <p style="line-height: 1.6; font-size: 0.95em;">
+                    <strong>批判的実在論:</strong> 「原発の<span style="color: #d32f2f;">構造的差別</span>」（Its象限の権力構造）<br><br>
+                    <strong>インテグラル理論:</strong> 原発問題は、<span style="color: #d68910;">I象限</span>（内的不安・意識発達）、<span style="color: #2c5282;">It象限</span>（健康データ・行動）、<span style="color: #c2185b;">We象限</span>（文化的分断と統合）、<span style="color: #d32f2f;">Its象限</span>（権力構造）の<strong>4象限すべてにわたる統合的課題</strong><br><br>
+                    批判的実在論のIts象限分析（権力構造）は<strong>正しく重要</strong>だが、それだけでは不十分。<br>
+                    <strong>全象限の同時変容</strong>、そして<strong>すべての発達段階を考慮した30次元統合空間</strong>での理解と実践が必要。
+                </p>
+            </div>
+
+            <div class="slide-number">7/7</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">← 前へ</button>
+        <button class="nav-btn" id="nextBtn">次へ →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        showSlide(0);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>
